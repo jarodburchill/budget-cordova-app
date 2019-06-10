@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Title</title>
+        <!--jQuery-->
+        <script src="js/lib/jquery-2.1.4.js"></script>
+        <!--jQuery Mobile-->
+        <script src="js/lib/jquery.mobile-1.4.5.js"></script>
+        <!--jQuery Validator-->
+        <script src="js/lib/jquery.validate.js"></script>
+        <!--jQuery Mobile stylesheet-->
+        <link rel="stylesheet" type="text/css" href="css/lib/jquery.mobile-1.4.5.css">
+        <!--myStyle-->
+        <link rel="stylesheet" type="text/css" href="css/myStyle.css">
+        <!--myScripts-->
+        <script src="js/global.js"></script>
+        <script src="js/util.js"></script>
+        <script src="js/facade.js"></script>
+        <script src="js/database.js"></script>
+        <script src="js/DAL.js"></script>
+
+    </head>
+    <body>
+        <!--Home page 01-->
+        <div id="pgHome" data-role="page" data-theme="b">
+            <header data-role="header">
+                <h3>Budget App</h3>
+            </header>
+            <section data-role="content">
+                <h3 align="center">Home</h3><br>
+                <p align="center">Welcome to my student budget helper app!</p>
+                <div align="center">
+                    <img src="img/money.png" style="width: 75%;">
+                </div>
+                <p align="center">This app helps you keep track of your funds. You can create different budget
+                    categories and set limits and date filter rates for those budgets and their entries.</p>
+                <button onclick="window.location.href='#pgViewBudgets'">Start Budgeting!</button>
+            </section>
+            <footer data-role="footer" data-position="fixed">
+                <div data-role="navbar" data-iconpos="bottom" data-position="fixed">
+                    <ul>
+                        <li><a href="#pgHome" data-icon="home" class="ui-btn-active ui-state-persist">Home</a></li>
+                        <li><a href="#pgViewBudgets" data-icon="bars">Budgets</a></li>
+                        <li><a href="#pgSettings" data-icon="gear">Settings</a></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+        <!--View Budget page 02-->
+        <div id="pgViewBudgets" data-role="page" data-theme="b">
+            <header data-role="header">
+                <h3>Budget App</h3>
+            </header>
+            <section data-role="content">
+                <h3 align="center">Your Budgets</h3>
+                <br>
+                <ul id="lvBudgets" data-role="listview">
+                    <!-- Dynamically created in facade.js -->
+                </ul>
+                <br>
+                <button type="button" id="btnAddBudget">Add Budget Category</button>
+            </section>
+            <footer data-role="footer" data-position="fixed">
+                <div data-role="navbar" data-iconpos="bottom" data-position="fixed">
+                    <ul>
+                        <li><a href="#pgHome" data-icon="home">Home</a></li>
+                        <li><a href="#pgViewBudgets" data-icon="bars" class="ui-btn-active ui-state-persist">Budgets</a></li>
+                        <li><a href="#pgSettings" data-icon="gear">Settings</a></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+        <!--Add Budget page 03-->
+        <div id="pgAddBudget" data-role="page" data-theme="b">
+            <header data-role="header">
+                <h3>Budget App</h3>
+            </header>
+            <section data-role="content">
+                <h3 align="center">Add Budget Category</h3>
+                <form id="frmAddBudget" name="frmAddBudget">
+                    <label for="txtBudgetName">Name:</label>
+                    <input type="text" id="txtBudgetName" name="txtBudgetName">
+                    <label for="rngBudgetLimit">Limit $:</label>
+                    <input type="range" id="rngBudgetLimit" name="rngBudgetLimit" value="0" min="0" max="1000">
+                    <fieldset data-role="controlgroup">
+                        <legend>Filter Rate:</legend>
+                        <input type="radio" name="rdoBudgetRate" id="rdoBudgetRate-weekly" value="Weekly" checked="checked" />
+                        <label for="rdoBudgetRate-weekly">Weekly</label>
+
+                        <input type="radio" name="rdoBudgetRate" id="rdoBudgetRate-bi-weekly" value="Bi-Weekly"  />
+                        <label for="rdoBudgetRate-bi-weekly">Bi-Weekly</label>
+
+                        <input type="radio" name="rdoBudgetRate" id="rdoBudgetRate-monthly" value="Monthly"  />
+                        <label for="rdoBudgetRate-monthly">Monthly</label>
+
+                        <input type="radio" name="rdoBudgetRate" id="rdoBudgetRate-bi-monthly" value="Bi-Monthly"  />
+                        <label for="rdoBudgetRate-bi-monthly">Bi-Monthly</label>
+                    </fieldset><br>
+                    <button type="button" id="btnSaveBudget">Save</button>
+                </form>
+            </section>
+            <footer data-role="footer" data-position="fixed">
+                <div data-role="navbar" data-iconpos="bottom" data-position="fixed">
+                    <ul>
+                        <li><a href="#pgHome" data-icon="home">Home</a></li>
+                        <li><a href="#pgViewBudgets" data-icon="bars" class="ui-btn-active ui-state-persist">Budgets</a></li>
+                        <li><a href="#pgSettings" data-icon="gear">Settings</a></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+        <!--Edit Budget page 04-->
+        <div id="pgEditBudget" data-role="page" data-theme="b">
+            <header data-role="header">
+                <h3>Budget App</h3>
+            </header>
+            <section data-role="content">
+                <h3 align="center">Edit Budget Category</h3>
+                <form id="frmEditBudget" name="frmEditBudget">
+                    <label for="txtEditBudgetName">Name:</label>
+                    <input type="text" id="txtEditBudgetName" name="txtEditBudgetName" disabled>
+                    <label for="rngEditBudgetLimit">Limit $:</label>
+                    <input type="range" id="rngEditBudgetLimit" name="rngEditBudgetLimit" value="0" min="0" max="1000">
+                    <fieldset data-role="controlgroup">
+                        <legend>Filter Rate:</legend>
+                        <input type="radio" name="rdoEditBudgetRate" id="rdoEditBudgetRate-weekly" value="Weekly"/>
+                        <label for="rdoEditBudgetRate-weekly">Weekly</label>
+
+                        <input type="radio" name="rdoEditBudgetRate" id="rdoEditBudgetRate-bi-weekly" value="Bi-Weekly"  />
+                        <label for="rdoEditBudgetRate-bi-weekly">Bi-Weekly</label>
+
+                        <input type="radio" name="rdoEditBudgetRate" id="rdoEditBudgetRate-monthly" value="Monthly"  />
+                        <label for="rdoEditBudgetRate-monthly">Monthly</label>
+
+                        <input type="radio" name="rdoEditBudgetRate" id="rdoEditBudgetRate-bi-monthly" value="Bi-Monthly"  />
+                        <label for="rdoEditBudgetRate-bi-monthly">Bi-Monthly</label>
+                    </fieldset><br>
+                    <button type="button" id="btnUpdateBudget" class="ui-btn ui-btn-inline">Update</button>
+                    <button type="button" id="btnDeleteBudget" class="ui-btn ui-btn-inline">Delete</button>
+                    <button type="button" id="btnCancelUpdateBudget" class="ui-btn ui-btn-inline">Cancel</button>
+                </form>
+            </section>
+            <footer data-role="footer" data-position="fixed">
+                <div data-role="navbar" data-iconpos="bottom" data-position="fixed">
+                    <ul>
+                        <li><a href="#pgHome" data-icon="home">Home</a></li>
+                        <li><a href="#pgViewBudgets" data-icon="bars" class="ui-btn-active ui-state-persist">Budgets</a></li>
+                        <li><a href="#pgSettings" data-icon="gear">Settings</a></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+        <!--View Entries page 05-->
+        <div id="pgViewEntries" data-role="page" data-theme="b">
+            <header data-role="header">
+                <h3>Budget App</h3>
+            </header>
+            <section data-role="content">
+                <div id="divViewEntries">
+                    <!--dynamic title-->
+                </div>
+                <button type="button" id="btnEditBudget">Edit Budget</button>
+                <button type="button" id="btnAddEntry">Add Entry</button>
+                <div id="divRemainingBudget">
+                    <!--dynamic total-->
+                </div>
+                <p>Current Period Entries:</p><br>
+                <ul id="lvCurrentEntries" data-role="listview">
+                    <!-- Dynamically created in facade.js -->
+                </ul><br>
+                <button type="button" id="btnViewAllEntries">View All Entries</button>
+            </section>
+            <footer data-role="footer" data-position="fixed">
+                <div data-role="navbar" data-iconpos="bottom" data-position="fixed">
+                    <ul>
+                        <li><a href="#pgHome" data-icon="home">Home</a></li>
+                        <li><a href="#pgViewBudgets" data-icon="bars" class="ui-btn-active ui-state-persist">Budgets</a></li>
+                        <li><a href="#pgSettings" data-icon="gear">Settings</a></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+        <!--View All Entries page 06-->
+        <div id="pgViewAllEntries" data-role="page" data-theme="b">
+            <header data-role="header">
+                <h3>Budget App</h3>
+            </header>
+            <section data-role="content">
+                <h3 align="center">All Entries</h3>
+                <button type="button" id="btnGoBack">Go Back</button><br>
+                <ul id="lvAllEntries" data-role="listview">
+                    <!-- Dynamically created in facade.js -->
+                </ul><br>
+            </section>
+            <footer data-role="footer" data-position="fixed">
+                <div data-role="navbar" data-iconpos="bottom" data-position="fixed">
+                    <ul>
+                        <li><a href="#pgHome" data-icon="home">Home</a></li>
+                        <li><a href="#pgViewBudgets" data-icon="bars" class="ui-btn-active ui-state-persist">Budgets</a></li>
+                        <li><a href="#pgSettings" data-icon="gear">Settings</a></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+        <!--Add Entry page 07-->
+        <div id="pgAddEntry" data-role="page" data-theme="b">
+            <header data-role="header">
+                <h3>Budget App</h3>
+            </header>
+            <section data-role="content">
+                <h3 align="center">Add Entry</h3>
+                <form id="frmAddEntry" name="frmAddEntry">
+                    <label for="txtEntryName">Name:</label>
+                    <input type="text" id="txtEntryName" name="txtEntryName">
+                    <label for="txtEntryDescription">Description:</label>
+                    <textarea id="txtEntryDescription" name="txtEntryDescription"></textarea>
+                    <label for="txtEntryAmount">Amount $:</label>
+                    <input type="number" id="txtEntryAmount" name="txtEntryAmount">
+                    <label for="txtEntryDate">Date:</label>
+                    <input type="date" id="txtEntryDate" name="txtEntryDate"><br>
+                    <button type="button" id="btnSaveEntry">Save</button>
+                </form>
+                <button onclick="window.location.href='#pgViewEntries'">Go Back</button>
+            </section>
+            <footer data-role="footer" data-position="fixed">
+                <div data-role="navbar" data-iconpos="bottom" data-position="fixed">
+                    <ul>
+                        <li><a href="#pgHome" data-icon="home">Home</a></li>
+                        <li><a href="#pgViewBudgets" data-icon="bars" class="ui-btn-active ui-state-persist">Budgets</a></li>
+                        <li><a href="#pgSettings" data-icon="gear">Settings</a></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+        <!--Edit Entry page 08-->
+        <div id="pgEditEntry" data-role="page" data-theme="b">
+            <header data-role="header">
+                <h3>Budget App</h3>
+            </header>
+            <section data-role="content">
+                <h3 align="center">Edit Entry</h3>
+                <form id="frmEditEntry" name="frmAddEntry">
+                    <label for="txtEditEntryName">Name:</label>
+                    <input type="text" id="txtEditEntryName" name="txtEditEntryName">
+                    <label for="txtEditEntryDescription">Description:</label>
+                    <textarea id="txtEditEntryDescription" name="txtEditEntryDescription"></textarea>
+                    <label for="txtEditEntryAmount">Amount $:</label>
+                    <input type="number" id="txtEditEntryAmount" name="txtEditEntryAmount">
+                    <label for="txtEditEntryDate">Date:</label>
+                    <input type="date" id="txtEditEntryDate" name="txtEditEntryDate"><br>
+                    <button type="button" id="btnUpdateEntry" class="ui-btn ui-btn-inline">Update</button>
+                    <button type="button" id="btnDeleteEntry" class="ui-btn ui-btn-inline">Delete</button>
+                    <button type="button" id="btnCancelUpdateEntry" class="ui-btn ui-btn-inline">Cancel</button>
+                </form>
+            </section>
+            <footer data-role="footer" data-position="fixed">
+                <div data-role="navbar" data-iconpos="bottom" data-position="fixed">
+                    <ul>
+                        <li><a href="#pgHome" data-icon="home">Home</a></li>
+                        <li><a href="#pgViewBudgets" data-icon="bars" class="ui-btn-active ui-state-persist">Budgets</a></li>
+                        <li><a href="#pgSettings" data-icon="gear">Settings</a></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+        <!--Settings page 09-->
+        <div id="pgSettings" data-role="page" data-theme="b">
+            <header data-role="header">
+                <h3>Budget App</h3>
+            </header>
+            <section data-role="content">
+                <h3 align="center">Settings</h3>
+                <label for="flpDarkMode">Dark Mode: (Coming Soon)</label>
+                <select id="flpDarkMode" data-role="slider">
+                    <option value="off">Off</option>
+                    <option value="on" selected>On</option>
+                </select>
+                <label for="btnClearDatabase">Clear Database:</label>
+                <button type="button" id="btnClearDatabase" class="ui-btn ui-btn-inline">Clear</button>
+                <br><br>
+                <ul data-role="listview">
+                    <li>
+                        <a href="#pgAbout">
+                            <h3>About</h3>
+                        </a>
+                    </li>
+                </ul>
+
+            </section>
+            <footer data-role="footer" data-position="fixed">
+                <div data-role="navbar" data-iconpos="bottom" data-position="fixed">
+                    <ul>
+                        <li><a href="#pgHome" data-icon="home">Home</a></li>
+                        <li><a href="#pgViewBudgets" data-icon="bars">Budgets</a></li>
+                        <li><a href="#pgSettings" data-icon="gear" class="ui-btn-active ui-state-persist">Settings</a></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+        <!--About page 10-->
+        <div id="pgAbout" data-role="page" data-theme="b">
+            <header data-role="header">
+                <h3>Budget App</h3>
+            </header>
+            <section data-role="content">
+                <h3 align="center">About</h3>
+                <h4>Developer:</h4>
+                <p>Jarod Burchill</p><br>
+                <p>Please feel free to contact me if you have any suggestions.</p>
+                <a href="mailto:jburchill3780@conestogac.on.ca" data-role="button" data-icon="mail" data-position="left">jburchill3780@conestogac.on.ca</a>
+                <a href="https://www.linkedin.com/in/jarodburchill/" data-role="button" data-icon="user" data-position="left">LinkedIn</a>
+                <button onclick="window.location.href='#pgSettings'" data-role="button" data-icon="arrow-l" data-position="left">Go Back</button>
+            </section>
+            <footer data-role="footer" data-position="fixed">
+                <div data-role="navbar" data-iconpos="bottom" data-position="fixed">
+                    <ul>
+                        <li><a href="#pgHome" data-icon="home">Home</a></li>
+                        <li><a href="#pgViewBudgets" data-icon="bars">Budgets</a></li>
+                        <li><a href="#pgSettings" data-icon="gear" class="ui-btn-active ui-state-persist">Settings</a></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>
